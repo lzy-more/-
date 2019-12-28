@@ -11,6 +11,10 @@
       
       }
     },
+    onLoad(options){
+console.log('来到详情页面了',options);
+
+    },
     methods: {
    
     }

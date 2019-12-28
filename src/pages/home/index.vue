@@ -4,7 +4,10 @@
     <swiper indicator-dots autoplay circular>
       <block v-for="item in swiperData" :key="item.id">
         <swiper-item>
-          <image mode="aspectFill" :src="item.src"></image>
+          <!-- <image mode="aspectFill" :src="item.src"  @click="getdetail(item.id)"></image> -->
+            <image mode="aspectFill" :src="item.src"  @click="getdetail(item.id)"></image>
+
+        
         </swiper-item>
       </block>
     </swiper>
@@ -33,6 +36,18 @@
         </div>
       </div>
     </div>
+        <!-- 4.0 到底的提示 -->
+        <div class="end-tips">
+          <span class="iconfont icon-xiao"></span>
+          <span class="bottomline">我是有底线的哦~</span>
+        </div>
+        <!-- 5.0 回到顶部 -->
+        <div v-show="isShowToTop">
+          <div @click="goToTop" class="to-top">
+            <image src="/static/images/arrow_top@2x.png"/>
+            <text>顶部</text>
+          </div>
+        </div>
   </div>
 </template>
 
@@ -40,6 +55,8 @@
   export default {
     data() {
       return {
+        isShowToTop:false, // 是否显示回到顶部
+
         swiperData: [{
             src: 'https://gss0.baidu.com/-Po3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/2e2eb9389b504fc2de49fce3e4dde71191ef6dc5.jpg',
             id: '1'
@@ -179,6 +196,15 @@
       console.log(11111111111111);
       this.getSwiper()
     },
+    onPageScroll({scrollTop}){
+    if (scrollTop > 80){
+      if (this.isShowToTop) return
+      this.isShowToTop = true
+    } else {
+      if (!this.isShowToTop) return
+      this.isShowToTop = false
+    }
+  },
     methods: {
       // async getSwiper() {
       //   console.log(2222222);
@@ -187,6 +213,19 @@
       // }
       getSwiper(){
 
+      },
+         // 回到顶部
+    goToTop(){
+      wx.pageScrollTo({
+        scrollTop: 0,
+        duration: 300
+      })
+    },
+      getdetail(id){
+        console.log(id);
+        
+const url=`../index/main?id=${id}`
+wx.navigateTo({ url: url });
       },
     }
   }
@@ -266,5 +305,37 @@
     height: 400rpx;
 
   }
-
+  .end-tips {
+  display: flex;
+  height: 100rpx;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  color: #888;
+  .bottomline {
+    margin-left: 5rpx;
+  }
+}
+.to-top {
+  width: 90rpx;
+  height: 90rpx;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  position: fixed;
+  right: 40rpx;
+  bottom: 50rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  image {
+    width: 24rpx;
+    height: 14rpx;
+  }
+  text {
+    margin-top: 20rpx;
+    color: #999;
+    font-size: small;
+  }
+}
 </style>
